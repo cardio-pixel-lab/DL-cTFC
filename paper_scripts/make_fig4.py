@@ -13,10 +13,10 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 GT_ROOT = '/home/share/clr/share/data/cag_seg_v6'
-PAIRS = '/home/share/clr/share/work/DLcTFC/results_segeval/pairs.csv'
-METRICS = '/home/share/clr/share/work/DLcTFC/paper_results/01_segmentation/seg_metrics_all_splits.csv'
-CMVD_CTFC = '/home/share/clr/share/work/DLcTFC/paper_results/02_ctfc/full_rerun/CMVD-ID1-ID50/ctfc_results.csv'
-OUT = '/home/share/clr/share/work/DLcTFC/paper_results/01_segmentation/fig4'
+PAIRS = '/home/share/clr/share/work/utils/tfc/results_segeval/pairs.csv'
+METRICS = '/home/share/clr/share/work/utils/tfc/paper_results/01_segmentation/seg_metrics_all_splits.csv'
+CMVD_CTFC = '/home/share/clr/share/work/utils/tfc/paper_results/02_ctfc/full_rerun/CMVD-ID1-ID50/ctfc_results.csv'
+OUT = '/home/share/clr/share/work/utils/tfc/paper_results/01_segmentation/fig4'
 
 def load(p): return np.array(Image.open(p))
 

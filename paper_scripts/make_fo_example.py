@@ -23,9 +23,9 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import Normalize
 
-NEW_BASE = '/home/share/clr/share/work/DLcTFC/paper_results/02_ctfc/full_rerun'
+NEW_BASE = '/home/share/clr/share/work/utils/tfc/paper_results/02_ctfc/full_rerun'
 DATA_ROOT = '/home/share/clr/share/data/AI_TMPFC'
-OUT = '/home/share/clr/share/work/DLcTFC/paper_results/02_ctfc/fo_example'
+OUT = '/home/share/clr/share/work/utils/tfc/paper_results/02_ctfc/fo_example'
 
 
 def contour(mask):

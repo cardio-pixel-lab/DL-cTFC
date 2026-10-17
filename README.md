@@ -52,6 +52,14 @@ CBIM-Medical-Image-Segmentation, Apache-2.0):
 Training / inference commands: see [seg/README.md](seg/README.md).
 Seg evaluation vs. manual GT: `seg/eval_seg_dice.py`.
 
+## Classification module (`cls/`)
+
+Per-sequence LCA/RCA routing (MedViT, vendored upstream code, see
+[LICENSE](cls/LICENSE)): per-frame binary classification aggregated to a
+`cls_summary.csv` by `cls/make_cls_summary.py` — the CSV consumed by
+`ctfc/main.py --cls-summary-csv` to split LCA into LAD/LCX and keep RCA as a
+single vessel. See [cls/README.md](cls/README.md).
+
 ## Repository layout
 
 | Path | Purpose |
@@ -69,19 +77,22 @@ Seg evaluation vs. manual GT: `seg/eval_seg_dice.py`.
 | `ctfc/test_ctfc.py` | Unit self-test on synthetic data |
 | `ctfc/test_qc_report.js` | Node assertions for the QC HTML pages |
 | `seg/` | Coronary segmentation network (medformer): training, prior-based 3-class inference, eval |
+| `cls/` | LCA/RCA sequence classification (MedViT): training + queue-level `cls_summary.csv` |
 | `paper_scripts/` | Manuscript figure pipelines (Fig 4–7, cohort assembly, clinical statistics) |
 | `data_specs/` | Column templates for the manual gold-standard inputs (TIMI grade, manual cTFC, echo, Likert) |
 
-## Working data (untracked)
+## Working data (kept out of this repository)
 
-Run outputs and internal docs live in this repository but are **gitignored**
-(patient-derived — never commit): `results_full_v2/` (full-cohort run with
-per-branch `detailed/` NPZ, the substrate for parameter-free F1/F2
-re-derivation), `results_f1q/` (**frozen 1963-row cohort** + `ctfc_final.csv`
-+ `边界说明.md` censoring report + QC review pages — the paper's truth
-source), `results_diag/`, `results_segeval/`, `f1_rule_check/`,
-`paper_results/`, and the `计划*.md` / `产物说明.md` / `方法描述*.md` working
-docs.
+This repository is **code-only**. All run outputs, cohort tables and internal
+docs stay in the local working directory (`utils/tfc`, patient-derived — never
+commit): `results_full_v2/` (full-cohort run with per-branch `detailed/` NPZ,
+the substrate for parameter-free F1/F2 re-derivation), `results_f1q/`
+(**frozen 1963-row cohort** + `ctfc_final.csv` + `边界说明.md` censoring
+report + QC review pages — the paper's truth source), `results_diag/`,
+`results_segeval/`, `f1_rule_check/`, `paper_results/`, and the `计划*.md` /
+`产物说明.md` / `方法描述*.md` working docs. `paper_scripts/` entry paths point
+there; derived artifacts such as `results_segeval/pairs.csv` are regenerated
+by `seg/eval_seg_dice.py`.
 
 ## Installation
 
@@ -90,6 +101,7 @@ Two independent stacks:
 ```bash
 pip install -r requirements.txt          # ctfc/ + paper_scripts/ (Python ≥ 3.9)
 pip install -r seg/requirements.txt      # seg/ (PyTorch training/inference)
+pip install -r cls/requirements.txt      # cls/ (PyTorch + timm; may share env with seg/)
 ```
 
 The QC HTML page test additionally requires [Node.js](https://nodejs.org/).

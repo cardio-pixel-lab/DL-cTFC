@@ -12,6 +12,7 @@ f1_rule_check/
 
 # Segmentation checkpoints & training artifacts
 *.pth
+!cls/experiments/*.log
 seg/exp/
 seg/log/
 seg/preds/
@@ -28,3 +29,6 @@ seg/preds/
 
 # Node (QC page test)
 node_modules/
+
+# Classification inference outputs (regenerable)
+cls/CustomDataset/test_results*/

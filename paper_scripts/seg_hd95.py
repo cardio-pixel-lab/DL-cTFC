@@ -12,8 +12,8 @@ from PIL import Image
 from scipy import ndimage
 
 GT_ROOT = '/home/share/clr/share/data/cag_seg_v6'
-PAIRS = '/home/share/clr/share/work/DLcTFC/results_segeval/pairs.csv'
-OUTDIR = '/home/share/clr/share/work/DLcTFC/paper_results/01_segmentation'
+PAIRS = '/home/share/clr/share/work/utils/tfc/results_segeval/pairs.csv'
+OUTDIR = '/home/share/clr/share/work/utils/tfc/paper_results/01_segmentation'
 FOV_MM = 350.0          # assumed 512 px FOV (no pixel spacing in source DICOM)
 MM_PER_PX = FOV_MM / 512.0
 

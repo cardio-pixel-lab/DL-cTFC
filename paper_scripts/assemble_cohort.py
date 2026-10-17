@@ -9,7 +9,7 @@ Output columns (run_clinical.py contract):
 import argparse, os
 import pandas as pd
 
-BASE = '/home/share/clr/share/work/DLcTFC/paper_results/02_ctfc/full_rerun'
+BASE = '/home/share/clr/share/work/utils/tfc/paper_results/02_ctfc/full_rerun'
 QUEUES = [
     ('CAD', f'{BASE}/CAD-ID1-ID64/ctfc_results.csv'),
     ('CMVD', f'{BASE}/CMVD-ID1-ID50/ctfc_results.csv'),
@@ -24,7 +24,7 @@ COLMAP = {
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--outdir', default='/home/share/clr/share/work/DLcTFC/paper_results/02_ctfc')
+    ap.add_argument('--outdir', default='/home/share/clr/share/work/utils/tfc/paper_results/02_ctfc')
     args = ap.parse_args()
     frames = []
     for cohort, path in QUEUES:
