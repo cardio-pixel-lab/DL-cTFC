@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Outputs & experiment data (patient-derived — NEVER commit)
+results_*/
+output*/
+paper_results/
+f1_rule_check/
+*.log
+
+# Segmentation checkpoints & training artifacts
+*.pth
+seg/exp/
+seg/log/
+seg/preds/
+
+# Internal working docs (Chinese, contain patient identifiers)
+计划*.md
+产物说明.md
+方法描述*.md
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Node (QC page test)
+node_modules/

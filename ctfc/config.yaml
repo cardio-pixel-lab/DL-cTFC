@@ -1,0 +1,58 @@
+# CTFC（corrected TIMI Frame Count）自动计算配置
+# 算法依据：Gibson 1996, Circulation 93:879（F1=近端首全进入，F2=空间远端到达），见 README.md
+
+mask_processing:
+  border_width: 30            # 边缘伪影去除宽度（px）
+  min_component_area: 50      # 小连通分量过滤阈值（px）
+
+first_opac:
+  window: to_fmax             # 文档性定值：FO 搜索窗口固定 [0, Fmax]，不可改
+  hysteresis_frames: 2        # FO 置位需连续 hysteresis_frames 帧非零（去单帧闪烁）
+
+landmarks:
+  seed_frac: 0.02             # 种子 S = 最早充 seed_frac 像素的最大连通分量（ostium 锚点，空间）
+  proximal_frac: 0.10         # 近端区 P = 离 S 测地距离最近的 10% 像素（空间，高原整段并入）
+  distal_frac: 0.10           # 远端区 D = 离 S 测地距离最远的 10% 像素（空间，高原整段并入）
+  max_region_frac: 0.40       # 区域占比软上限（超限记 note）
+  min_region_pixels: 30       # 区域像素软下限（低于记 note）
+  extent_merge: big           # E=M[Fmax] 范围取法: largest=仅最大连通分量 / big=最大分量+面积≥extent_min_comp_frac×最大分量的分量 / all=全部分量
+  extent_min_comp_frac: 0.10  # big 模式面积占比阈值（分量面积 ≥ 最大分量的该比例才并入 E）
+
+degenerate:
+  degenerate_span: 1          # t_d - t_p <= 该值 → 记"单相充盈(退化)" note（不再单独走 F1/F2 路径）
+
+f1:
+  percentile: 0.15            # F1 = P 区 FO 的低分位（P 区"首批显影"帧）。
+                              # 原 0.80 与 sentinel(FO 钳 Fmax) 组合会让 ≥20% 未充盈像素把
+                              # 分位锁死在 Fmax ⇒ F1≈F2 ⇒ CTFC≈0（全队列 46% 命中）。
+                              # 低分位单调、零无效；0.15 与肉眼「首显影」最贴合（待金标准标定）。
+
+f2:
+  percentile: 0.10            # F2 = D 区 FO 的 10 分位（远端"开始到达"帧，待金标准标定）
+
+calculation:
+  frame_rate_correction: 2.0  # 15fps -> 30fps 帧数换算（fps 假设，见 README.md 已知局限）
+  lad_correction: 1.7         # LAD 长度校正因子（Gibson 1996）
+  lad_correction_enabled: true
+
+validation:
+  min_frames: 10              # 硬守卫：最少帧数
+  min_fmax_pixels: 800        # 硬守卫：Fmax 帧最少非零像素
+  max_ctfc: 200               # 硬守卫：CTFC 上限（作用于 LAD ÷1.7 校正后的值）
+
+output:
+  format: csv
+  save_detailed_frames: true  # 每序列保存 fill_p/fill_d/fill_E 曲线（JSON）+ 掩码/FO（NPZ）到 detailed/
+  generate_plots: true        # 生成可视化图
+  save_f1f2_frames: true      # 保存 F1/F2 对应源帧 PNG（叠加分支掩码/P/D 区）到 frames/，供人工查验
+
+qc:
+  enabled: false              # 生成 QC 连拍图 + 人工核对 HTML（qc/qc_report.html）+ 待审队列（qc/qc_queue.csv）
+  sample_frac: 1.0            # 干净有效行抽样比例（无效/退化/F2==F1 始终全量）；全队列建议 0.05~0.1
+
+dataset:
+  mask_suffix: "_pred.png"    # 掩码文件后缀
+
+dataset_filter:
+  enabled: false
+  include_case_sequences: []  # 白名单，如 ["ID1", "ID2"]（病例级）或 [{"case_id": "ID1", "sequence_ids": ["IM000001"]}]
